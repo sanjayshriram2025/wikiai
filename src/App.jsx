@@ -18,6 +18,7 @@ function App() {
   const [videos, setVideos] = useState([]);
   const [history, setHistory] = useState([]);
   const [query, setQuery] = useState("");
+  const [searched, setSearched] = useState(false);
 
   const handleSearch = async (searchQuery) => {
     if (!searchQuery.trim()) return;
@@ -27,6 +28,7 @@ function App() {
     setCompareResult(null);
     setRelatedArticles([]);
     setVideos([]);
+    setSearched(true);
     setHistory(prev => {
       const filtered = prev.filter(h => h !== searchQuery);
       return [searchQuery, ...filtered].slice(0, 10);
@@ -68,52 +70,103 @@ function App() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg, #0f0c29, #302b63, #24243e)",
+      background: "#050510",
       fontFamily: "'Segoe UI', sans-serif",
+      color: "white",
+      overflowX: "hidden"
     }}>
+
+      {/* Background */}
       <div style={{
-        background: "rgba(255,255,255,0.05)",
-        backdropFilter: "blur(10px)",
-        borderBottom: "1px solid rgba(255,255,255,0.1)",
-        padding: "20px 40px",
+        position: "fixed", top: 0, left: 0,
+        width: "100%", height: "100%", zIndex: 0,
+        background: "radial-gradient(ellipse at 20% 50%, rgba(102,126,234,0.12) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(240,147,251,0.08) 0%, transparent 60%)"
+      }} />
+
+      {/* Header */}
+      <div style={{
+        position: "relative", zIndex: 10,
         display: "flex", alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        padding: "18px 40px",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        backdropFilter: "blur(20px)",
+        background: "rgba(5,5,16,0.8)"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div style={{
-            width: "40px", height: "40px",
+            width: "42px", height: "42px",
             background: "linear-gradient(135deg, #667eea, #764ba2)",
-            borderRadius: "12px", display: "flex",
-            alignItems: "center", justifyContent: "center", fontSize: "20px"
+            borderRadius: "13px", display: "flex",
+            alignItems: "center", justifyContent: "center",
+            fontSize: "20px", boxShadow: "0 4px 20px rgba(102,126,234,0.35)"
           }}>🔍</div>
-          <span style={{
-            fontSize: "22px", fontWeight: "800",
-            background: "linear-gradient(135deg, #667eea, #f093fb)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"
-          }}>WikiAI Search</span>
+          <div>
+            <div style={{
+              fontSize: "20px", fontWeight: "800",
+              background: "linear-gradient(135deg, #667eea, #f093fb)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"
+            }}>WikiAI Search</div>
+            <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.25)", marginTop: "1px" }}>
+              Part of Arivu AI
+            </div>
+          </div>
         </div>
-        <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px" }}>
-          Part of Arivu AI
-        </span>
+        <a href="https://arivu-two.vercel.app" style={{
+          background: "rgba(102,126,234,0.12)",
+          border: "1px solid rgba(102,126,234,0.25)",
+          borderRadius: "20px", padding: "6px 16px",
+          color: "#a78bfa", fontSize: "12px",
+          fontWeight: "600", textDecoration: "none"
+        }}>← Back to Arivu AI</a>
       </div>
 
-      <div style={{ textAlign: "center", padding: "60px 20px 20px" }}>
-        <h1 style={{
-          fontSize: "52px", fontWeight: "900", margin: "0 0 16px",
-          background: "linear-gradient(135deg, #fff 0%, #a78bfa 50%, #f093fb 100%)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-          lineHeight: 1.2
-        }}>Search. Learn. Discover.</h1>
-        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "18px", margin: "0 0 40px" }}>
-          Type anything — AI organizes Wikipedia into beautiful insights
-        </p>
+      {/* Hero */}
+      <div style={{
+        position: "relative", zIndex: 10,
+        textAlign: "center",
+        padding: searched ? "40px 20px 30px" : "80px 20px 60px",
+        transition: "padding 0.5s"
+      }}>
+        {!searched && (
+          <>
+            <div style={{
+              display: "inline-block",
+              background: "rgba(102,126,234,0.1)",
+              border: "1px solid rgba(102,126,234,0.25)",
+              borderRadius: "20px", padding: "6px 18px",
+              color: "#a78bfa", fontSize: "12px",
+              fontWeight: "600", marginBottom: "24px"
+            }}>
+              🌐 Powered by Wikipedia + AI
+            </div>
+            <h1 style={{
+              fontSize: "54px", fontWeight: "800",
+              lineHeight: 1.1, margin: "0 0 16px"
+            }}>
+              Search.<br/>
+              <span style={{
+                background: "linear-gradient(135deg, #667eea, #f093fb)",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"
+              }}>Learn. Discover.</span>
+            </h1>
+            <p style={{
+              color: "rgba(255,255,255,0.4)", fontSize: "17px",
+              maxWidth: "500px", margin: "0 auto 40px", lineHeight: 1.7
+            }}>
+              Type anything — AI organizes Wikipedia into beautiful insights, videos and articles
+            </p>
+          </>
+        )}
+
+        {/* Search Bar */}
         <div style={{
           maxWidth: "680px", margin: "0 auto 16px",
-          display: "flex", gap: "12px",
-          background: "rgba(255,255,255,0.07)",
-          border: "1px solid rgba(255,255,255,0.15)",
-          borderRadius: "20px", padding: "8px 8px 8px 20px",
-          boxShadow: "0 8px 32px rgba(102,126,234,0.3)"
+          display: "flex", gap: "10px",
+          background: "rgba(255,255,255,0.05)",
+          border: "1px solid rgba(255,255,255,0.12)",
+          borderRadius: "18px", padding: "8px 8px 8px 20px",
+          boxShadow: "0 8px 40px rgba(102,126,234,0.2)"
         }}>
           <input
             type="text"
@@ -132,41 +185,50 @@ function App() {
             onClick={() => { if (query.trim()) handleSearch(query.trim()); }}
             disabled={loading}
             style={{
-              background: "linear-gradient(135deg, #667eea, #764ba2)",
-              border: "none", borderRadius: "14px",
+              background: loading ? "rgba(102,126,234,0.5)" : "linear-gradient(135deg, #667eea, #764ba2)",
+              border: "none", borderRadius: "12px",
               padding: "12px 28px", color: "white",
               fontWeight: "700", fontSize: "15px",
               cursor: loading ? "not-allowed" : "pointer",
-              opacity: loading ? 0.7 : 1
+              boxShadow: "0 4px 15px rgba(102,126,234,0.3)",
+              transition: "all 0.2s"
             }}
-          >{loading ? "⏳ Searching..." : "Search →"}</button>
+          >{loading ? "⏳" : "Search →"}</button>
         </div>
+
         <SearchHistory history={history} onSelect={(item) => { setQuery(item); handleSearch(item); }} />
       </div>
 
+      {/* Loading */}
       {loading && (
-        <div style={{ textAlign: "center", padding: "40px" }}>
+        <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "60px" }}>
           <div style={{
-            display: "inline-block", width: "50px", height: "50px",
-            border: "4px solid rgba(255,255,255,0.1)",
-            borderTop: "4px solid #667eea",
-            borderRadius: "50%", animation: "spin 1s linear infinite"
+            display: "inline-block", width: "48px", height: "48px",
+            border: "3px solid rgba(102,126,234,0.2)",
+            borderTop: "3px solid #667eea",
+            borderRadius: "50%", animation: "spin 0.8s linear infinite"
           }} />
-          <p style={{ color: "rgba(255,255,255,0.5)", marginTop: "16px" }}>Fetching and analyzing...</p>
+          <p style={{ color: "rgba(255,255,255,0.4)", marginTop: "16px", fontSize: "15px" }}>
+            Searching Wikipedia and analyzing...
+          </p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       )}
 
+      {/* Error */}
       {error && (
         <div style={{
+          position: "relative", zIndex: 10,
           maxWidth: "600px", margin: "20px auto",
-          background: "rgba(255,59,59,0.1)", border: "1px solid rgba(255,59,59,0.3)",
+          background: "rgba(255,59,59,0.08)",
+          border: "1px solid rgba(255,59,59,0.25)",
           borderRadius: "16px", padding: "16px 24px",
           color: "#ff6b6b", textAlign: "center"
         }}>⚠️ {error}</div>
       )}
 
-      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 20px 60px" }}>
+      {/* Results */}
+      <div style={{ position: "relative", zIndex: 10, maxWidth: "1100px", margin: "0 auto", padding: "0 20px 80px" }}>
         {!isCompare && result && (
           <ResultCard data={result.data} title={result.title} image={result.image} />
         )}
@@ -180,20 +242,22 @@ function App() {
         <RelatedArticles articles={relatedArticles} />
       </div>
 
+      {/* Footer */}
       <div style={{
-        background: "rgba(255,255,255,0.03)",
-        borderTop: "1px solid rgba(255,255,255,0.08)",
-        padding: "30px 40px", textAlign: "center"
+        position: "relative", zIndex: 10,
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+        padding: "32px 40px", textAlign: "center"
       }}>
-        <p style={{
+        <div style={{
+          fontSize: "18px", fontWeight: "800",
           background: "linear-gradient(135deg, #667eea, #f093fb)",
           WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-          fontWeight: "800", fontSize: "18px", margin: "0 0 8px"
-        }}>WikiAI Search</p>
-        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", margin: "0 0 6px" }}>
+          marginBottom: "8px"
+        }}>WikiAI Search</div>
+        <p style={{ color: "rgba(255,255,255,0.25)", fontSize: "13px", marginBottom: "4px" }}>
           Built with ❤️ by Sanjay Shriram — Part of Arivu AI
         </p>
-        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: "12px", margin: 0 }}>
+        <p style={{ color: "rgba(255,255,255,0.15)", fontSize: "12px" }}>
           © 2026 Arivu AI. Powered by Wikipedia & YouTube API.
         </p>
       </div>
